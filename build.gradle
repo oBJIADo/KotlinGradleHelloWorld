@@ -1,0 +1,51 @@
+buildscript {
+    ext{
+        ktVersion = '1.3.10'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$ktVersion"
+    }
+}
+
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'kotlin'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/kt']
+        }
+    }
+}
+
+jar {
+    baseName = 'KotlinGradleTemplate'
+    version = '1.0'
+    manifest {
+        attributes 'Main-Class': 'com.tsuyanoshi.gktemplate.HelloWorld'
+    }
+}
+
+dependencies {
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit5:$ktVersion"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
