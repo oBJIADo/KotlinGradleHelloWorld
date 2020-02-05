@@ -1,18 +1,18 @@
-val ktVersion = "1.3.11"
-
 buildscript {
     repositories {
         mavenCentral()
     }
+
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.11")
+        classpath(kotlin(module = "gradle-plugin", version = "1.3.61"))
+        classpath(kotlin(module = "allopen", version = "1.3.61"))
     }
 }
 
 plugins {
-    eclipse
     idea
-    kotlin("jvm") version "1.3.11"
+
+    kotlin("jvm") version "1.3.61"
 }
 
 configure<JavaPluginConvention> {
@@ -20,27 +20,42 @@ configure<JavaPluginConvention> {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs = listOf("-Xjsr305=strict")
+        jvmTarget = "1.8"
+    }
+}
+
 repositories {
     mavenCentral()
+
+    maven {
+        setUrl("https://mvnrepository.com/repos/springio-plugins-release/")
+    }
 }
 
 tasks.jar {
-    baseName = "KotlinGradleTemplate"
+    baseName = "temlpate"
     version = "1.0"
     manifest {
-        attributes(Pair("Main-Class", "com.tsuyanoshi.gktemplate.HelloWorld"))
+        attributes(Pair("Main-Class", "com.tsuyanoshi.gktemplate.Template"))
     }
 }
 
 dependencies {
-    testCompile ("org.jetbrains.kotlin:kotlin-test-junit5:$ktVersion")
-    compile ("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-}
+    val ktVersion = "1.3.61"
+    val ktGroup = "org.jetbrains.kotlin"
 
-//sourceSets {
-//    main {
-//        java {
-//            srcDirs = ['src/main/kt']
-//        }
-//    }
-//}
+    val coroutinesVersion = "1.3.3"
+    val coroutinesGroup = "org.jetbrains.kotlinx"
+
+    testCompile(group = ktGroup, name = "kotlin-test-junit5", version = ktVersion)
+    compile(group = ktGroup, name = "kotlin-stdlib-jdk8", version = ktVersion)
+    compile(group = ktGroup, name = "kotlin-reflect", version = ktVersion)
+    compile(group = ktGroup, name = "kotlin-reflect", version = ktVersion)
+
+    compile(group = coroutinesGroup, name = "kotlinx-coroutines-core", version = coroutinesVersion)
+    compile(group = coroutinesGroup, name = "kotlinx-coroutines-core-common", version = coroutinesVersion)
+    compile(group = coroutinesGroup, name = "kotlinx-coroutines-jdk8", version = coroutinesVersion)
+}
